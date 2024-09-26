@@ -1,0 +1,91 @@
+Analysis:- 
+
+In the search problem, turning needs to be brought into consideration when agent moves from one state to
+another i.e in execute action. For instance, when the agent is facing upward and going left should account for turning left
+and moving forward in the left direction. Thus in order to move from one state to another, the direction
+of the agent needs to be changed to the direction that the agent is expected to move according to the action passed.
+In order to account for turning in path cost, each turn should be add 1 to the path cost. Thus going left is going to account
+for turning left(1) and then moving forward(1) thus a path cost of 2. Thus going straight is cheaper than turning left and right
+but going in opposite direction is going to cost more as it accounts for turning twice and moving foreward. If the agent is in right direction then
+going right is more cheaper than going up as the agent have to turn left and then move forward in order to go up.
+
+for example
+if agent direction is up
+action is left then cost going left is 2
+action is right then cost going right is 2
+action is up then cost going up is 1
+action is down then cost going down is 3
+
+if agent direction is down
+action is left then cost going left is 2
+action is right then cost going right is 2
+action is up then cost going up is 3
+action is down then cost going down is 1
+
+if agent direction is left
+action is left then cost going left is 1
+action is right then cost going right is 3
+action is up then cost going up is 2
+action is down then cost going down is 2
+
+if agent direction is right
+action is left then cost going left is 3
+action is right then cost going right is 1
+action is up then cost going up is 2
+action is down then cost going down is 2
+
+This is how direction will play a major role in determining the cost of the path when turning is considered.
+Pseudocode for direction:
+in execute action,
+ if action == 'Suck':
+ 	remove dirt
+	update the gui
+	increase performance by 100
+        do not increase the number of steps
+else:
+	action == 'UP':
+	agent direction = di
+         if di == 'up':
+		direction is not changed
+	 elif di == 'down':
+                turn agent twice to face up
+		decrease performance by 2
+		increase numsteps by 2
+         elif di == 'right':
+		turn agent to the direction left
+		decrease performance by 1
+		increase numsteps by 1
+	elif di == 'left':
+		turn agent to the direction right
+		decrease performance by 1
+		increase num steps by 1
+         after moving to the direction analyzed by the action, move foreward if there is no wall
+                increase performance by 1
+                we do not need to increase the numstep by 1 here as the next function takes care of that
+        similarly we have 3 elif statements with action DOWN, LEFT, RIGHT and increasing and decreasing the performance and numsteps accordingly by doing analysis in the example shown.
+
+in path cost:
+	after calculating the Eucledian distance including the z = sqrt(x**2 + y**2) for both the states, and storing it in e, we have to follow the similar steps of analysis
+        path cost is passed as c. We add e to it and then we either add 1, 2 or 3 which is equal to number of steps taken by the agent to go from one state to another. Here steps
+        account for turning as well. Going in same direction is going to cost 1 step, taking a turn is going to cost 2 steps, going in opposite direction is going to take 3 steps. For
+        Suck, we return c because when i added 1 to the algortihm, the agent start taking unnecessary zig zag path which affected efficiency of the path taken, but works perfectly with not
+        changing the cost.
+
+if  action == 'UP':
+	agent direction = di
+        if di == 'up':
+	        c + e + 1
+	elif di == 'down':
+                c + e + 3
+        elif di == 'right':
+		c + e + 2
+	elif di == 'left':
+		c + e + 2
+elif action == 'DOWN', 'LEFT, 'RIGHT:
+         it would have similar implementation but different values to the direction as going DOWN when your direction is down is going to cost less than when you direction is left or right.
+elif action == 'Suck'
+         return c   
+we do not add e in the c when we are sucking as the value of e is going to be 0 as the state1 == state2.
+I have already implemented turning logic in the execute action function, which accounts for turning in every algorithm whereas in the
+path cost function, turning is also taken in account for determining the cost. Thus by adding turning and moving adds a minimum of 1(just going foreward) to
+the path cost and maximum value of 3 to the pathcost(turning around and going foreward).
